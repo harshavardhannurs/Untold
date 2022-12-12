@@ -1,0 +1,35 @@
+body{
+  font-family: 'Poppins', sans-serif;
+  background-color: #ffffff;
+  background-image: url("https://www.transparenttextures.com/patterns/az-subtle.png");
+}
+
+.navbar-brand{
+  font-size: 1.5rem;
+  transition: transform 0.3s ease-in;
+}
+
+.navbar-brand:hover{
+  transform: rotate(-5deg);
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.index-page{
+  padding:13rem 2rem;
+}
+
+.main-title{
+  font-size: 7rem;
+}
+
+@media only screen and (min-width:768px){
+  .main-title{
+    font-size: 10rem;
+  }
+}
