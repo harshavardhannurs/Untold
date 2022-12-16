@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+
+<div class="d-flex flex-column justify-content-center align-items-center signup-field">
+  <div class="card">
+    <div class="card-header">
+      <h5>Sign in</h5>
+    </div>
+    <div class="card-body">
+      <form action="#" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" class="form-control" placeholder="Enter email" name="loginEmail">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="Enter password" name="loginPassword">
+        </div>
+        <button type="submit" class="btn btn-sm btn-warning rounded">Sign in</button>
+      </form>
+    </div>
+  </div>
+  <h6>Or</h6>
+  <div class="login-google">
+    <a href="#" class="btn btn-primary btn-md rounded"><i class="fa-brands fas fa-google"></i> Sign in with Google</a>
+  </div>
+  <div class="login-github">
+    <a href="#" class="btn btn-dark btn-md rounded"><i class="fa-brands fa-github"></i> Sign in with GitHub</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
