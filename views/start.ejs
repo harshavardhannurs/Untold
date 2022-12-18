@@ -17,6 +17,13 @@
 <div class="start-header mt-4 mb-3">
   Your secrets are safe here.
 </div>
+
+<%if(status){%>
+  <div id="isEmpty" class="d-flex justify-content-center align-items-center mt-5 empty-class">
+    <%=status%>
+  </div>
+<%}%>
+
 <% let secretsArray = [] %>
 <% for(let i=0;i<usersLists.length;i++){ %>
 <%   if(usersLists[i].secrets.length>0){ %>
@@ -34,6 +41,5 @@
   </div>
 <% } %>
 </div>
-
 
 <%- include("partials/footer") %>

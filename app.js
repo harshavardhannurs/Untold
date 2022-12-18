@@ -93,14 +93,16 @@ app.get("/signin", (req, res) => {
 });
 
 app.get("/start", (req, res)=>{
-  console.log(req.session);
   if(req.isAuthenticated()){
-    User.find({secrets:{$ne:null}}, (err, foundLists)=>{
+    User.find({$expr:{$gt:[{$size:"$secrets"}, 0]}}, (err, foundLists)=>{
       if(err){
         console.log(err);
       }else{
-        if(foundLists){
-          res.render('start', {usersLists:foundLists});
+        if(foundLists.length > 0){
+          console.log("FoundLists", foundLists);
+          res.render('start', {usersLists:foundLists, status:null});
+        }else{
+          res.render('start', {usersLists:[], status:"*cricket chirp...*"})
         }
       }
     })

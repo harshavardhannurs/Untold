@@ -232,6 +232,17 @@ textarea::placeholder{
   color:#ffc107;
 }
 
+.empty-class{
+  color:lightgray;
+  opacity:0.3;
+  font-size: 2rem;
+  font-style: italic;
+}
+
+.make-empty{
+  display:none;
+}
+
 @media only screen and (min-width:768px){
   .main-title{
     font-size: 10rem;
@@ -263,5 +274,8 @@ textarea::placeholder{
   }
   .main-title{
     font-size: 5.3rem;
+  }
+  .empty-class{
+    font-size: 1rem;
   }
 }
