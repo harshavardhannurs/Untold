@@ -22,8 +22,9 @@
       </div>
       <div class="col-sm-12 col-lg-8 submit-area">
         <form class="submit-form" action="/submit" method="post">
-          <textarea class="rounded border-warning" name="secret" rows="6" cols="80" maxlength="120" placeholder="*shushhh...*"></textarea>
+          <textarea id="character-check" class="rounded border-warning" name="secret" rows="6" cols="80" maxlength="120" placeholder="*shushhh...*"></textarea>
           <button type="submit" class="btn btn-sm rounded btn-warning border-dark submit-btn">Share</button>
+          <span id="character-num">0/120</span>
         </form>
       </div>
     </div>

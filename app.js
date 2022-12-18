@@ -166,7 +166,11 @@ app.post('/signin', (req, res)=>{
 
 app.post('/submit', (req, res)=>{
   const secret = req.body.secret;
-  console.log(req.user.id);
+  if(req.user.id){
+    console.log("userDB ID:",req.user.id);
+  }else{
+    res.redirect("/")
+  }
   User.findOneAndUpdate({_id:req.user.id}, {$push:{secrets:secret}}, function(err, foundUser){
     if (err) {
       console.log(err);

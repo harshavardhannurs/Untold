@@ -8,6 +8,10 @@ body{
   font-size: 1.5rem;
 }
 
+nav{
+  background-color: black;
+}
+
 .add-secret{
   border-color: black;
 }
@@ -194,6 +198,17 @@ textarea::placeholder{
   position: absolute;
   right:10px;
   bottom:10px;
+}
+
+.submit-area {
+  position: relative;
+}
+
+#character-num{
+  position: absolute;
+  left:5px;
+  bottom:7px;
+  color:#ffc107;
 }
 
 .wrapper{
