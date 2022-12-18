@@ -1,5 +1,15 @@
-function handleClick(){
-  const element = document.getElementById("password");
+function handleClickUp(){
+  const element = document.getElementById("passwordSignup");
+  if(element.type==="password"){
+    element.setAttribute('type', "text");
+    console.log(document.getElementById("emailSignup").value);
+  }else{
+    element.setAttribute('type', "password");
+  }
+}
+
+function handleClickIn(){
+  const element = document.getElementById("passwordSignin");
   if(element.type==="password"){
     element.setAttribute('type', "text");
   }else{

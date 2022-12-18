@@ -257,8 +257,11 @@ textarea::placeholder{
   }
 }
 
-@media only screen and (max-width:321px){
+@media only screen and (max-width:360px){
   .start-header{
     font-size: 3.35rem;
+  }
+  .main-title{
+    font-size: 5.3rem;
   }
 }

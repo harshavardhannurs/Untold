@@ -166,12 +166,13 @@ app.post('/signin', (req, res)=>{
 
 app.post('/submit', (req, res)=>{
   const secret = req.body.secret;
-  if(req.user.id){
-    console.log("userDB ID:",req.user.id);
-  }else{
-    res.redirect("/")
+  const secretID = new Date().getTime().toString() + Math.round(Math.random()*1000000).toString().slice(0, 16);
+  const secretItem = {
+    secret:secret,
+    secretID:secretID
   }
-  User.findOneAndUpdate({_id:req.user.id}, {$push:{secrets:secret}}, function(err, foundUser){
+  const userSecret = JSON.stringify(secretItem);
+  User.findOneAndUpdate({_id:req.user.id}, {$push:{secrets:userSecret}}, function(err, foundUser){
     if (err) {
       console.log(err);
     } else {
