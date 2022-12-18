@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+
+<nav class="navbar navbar-expand-lg bg-warning text-dark">
+  <div class="d-flex w-100 flex-row justify-content-between">
+    <div style="margin-top:2px;">
+      <a href="mailto:harshanurs06@gmail.com?subject=feedback" class="navbar-brand brand-name ms-3">Untold</a>
+    </div>
+    <div class="me-3">
+      <a class="btn btn-warning add-secret rounded" href="/start"><i class="fa-solid fa-backward"></i> Back to secrets</a>
+    </div>
+    <div>
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+    <div class="submit-container row">
+      <div class="col-sm-12 col-lg-4 submit-header-container">
+        <h5 class="submit-header">Share your secret.</h5>
+      </div>
+      <div class="col-sm-12 col-lg-8 submit-area">
+        <form class="submit-form" action="/submit" method="post">
+          <textarea class="rounded border-warning" name="secret" rows="10" cols="80" maxlength="120" placeholder="*shushhh...*"></textarea>
+          <button type="submit" class="btn btn-sm rounded btn-warning border-dark submit-btn">Share</button>
+        </form>
+      </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

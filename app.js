@@ -7,9 +7,12 @@ const ejs = require("ejs");
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
-const bcrypt = require('bcrypt');
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const GitHubStrategy = require('passport-github').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
+let profileID = 0;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
@@ -20,21 +23,23 @@ app.use(session({
   secret: "thisisuntold",
   saveUninitialized: false,
   resave: false,
+  cookie:{maxAge: 2 * 24 * 60 * 60 * 1000}
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://localhost:27017/untoldDB", {
-  useNewUrlParser: true
+  useNewUrlParser: true, useUnifiedTopology: true
 });
 
 const userSchema = new mongoose.Schema({
   googleId: String,
   githubId: String,
-  email: String,
+  username:String,
+  email:String,
   password: String,
-  secret: String,
-  username:String
+  secrets: [String]
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -45,7 +50,7 @@ const User = mongoose.model("User", userSchema);
 passport.use(User.createStrategy());
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
 passport.deserializeUser((id, done) => {
@@ -54,17 +59,29 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-// passport.createStrategy(new GoogleStrategy({
-//   clientID:,
-//   clientSecret:,
-//   callbackURL:
-// },
-// function(refreshToken, accessToken, profile, done){
-//   User.findOrCreate({googleId:profile.id}, {name:profile.name.givenName}, function(err, user){
-//     done(err ,user);
-//   });
-// }
-// ))
+passport.use(new GoogleStrategy({
+  clientID:"126955715599-v1m0otm3e2870vr8p7evrq35bsmkhhgr.apps.googleusercontent.com",
+  clientSecret:"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",
+  callbackURL:"http://localhost:3000/auth/google/start"
+},
+function(refreshToken, accessToken, profile, done){
+  User.findOrCreate({googleId:profile.id}, {username:profile.name.givenName, email:profile.email}, function(err, user){
+    done(err ,user);
+  });
+}
+))
+
+passport.use(new GitHubStrategy({
+    clientID: '9692ddee6c7433875682',
+    clientSecret: 'de7a52a48ec6c61d8a84d8919f80cc6b7963f121',
+    callbackURL: "http://localhost:3000/auth/github/start"
+  },
+  function(accessToken, refreshToken, profile, cb){
+    User.findOrCreate({ githubId: profile.id }, {username:profile.displayName}, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -79,50 +96,87 @@ app.get("/signin", (req, res) => {
 });
 
 app.get("/start", (req, res)=>{
-  res.render('start');
+  console.log(req.session);
+  if(req.isAuthenticated()){
+    User.find({secrets:{$ne:null}}, (err, foundLists)=>{
+      if(err){
+        console.log(err);
+      }else{
+        if(foundLists){
+          res.render('start', {usersLists:foundLists});
+        }
+      }
+    })
+  }else{
+    res.redirect("/signin");
+  }
+});
+
+app.get('/auth/google', passport.authenticate('google', {scope:['profile', 'email']}));
+
+app.get('/auth/google/start', passport.authenticate('google', {failureRedirect:'/'}),
+function(req, res){
+  res.redirect('/start');
+});
+
+app.get('/auth/github',
+  passport.authenticate('github', {scope:['profile', 'email']}));
+
+  app.get('/auth/github/start', passport.authenticate('github', {failureRedirect:'/'}),
+  function(req, res){
+    res.redirect('/start')
+  })
+
+app.get("/submit", (req, res)=>{
+  res.render("submit");
+});
+
+app.get("/logout", (req, res)=>{
+  req.logout((err)=>{
+    if(!err){res.redirect("/")}else{console.log(err)}
+  })
 });
 
 app.post("/signup", (req ,res)=>{
-  const email = req.body.registerEmail;
-  const password = req.body.registerPassword;
-  bcrypt.hash(password, saltRounds, (err, hash)=>{
-    if(!err){
-      const newUser = new User({
-        email:email,
-        password:hash
-      })
-      newUser.save((err)=>{
-        if(err){
-          console.log(err);
-        }else{
-          res.redirect('/start');
-        }
-      });
+  //For this to work the input fields in our form must have names as "username" and "password" and our Schema must have the same too
+  User.register({username:req.body.username}, req.body.password, (err, user)=>{
+    if(err){
+      console.log(err);
+      res.redirect("/signup");
     }else{
-      console.log(error);
+      passport.authenticate("local")(req, res, function(){
+        res.redirect("/start");
+      })
     }
   })
 })
 
 app.post('/signin', (req, res)=>{
-  const email = req.body.loginEmail;
-  const password = req.body.loginPassword;
-  User.findOne({email:email}, (err, result)=>{
+  const user = new User({
+    username:req.body.username,
+    password:req.body.password
+  });
+  req.login(user, (err)=>{
     if(err){
       console.log(err);
     }else{
-      if(result){
-        bcrypt.compare(password, result.password, (err, outcome)=>{
-          if(outcome==true){
-            console.log(true);
-            res.redirect("/start")
-          }else{
-            res.redirect("/login")
-          }
-        })
-      }
+      passport.authenticate("local")(req, res, function(){
+        res.redirect("/start");
+      })
     }
-  })
+  });
+});
+
+app.post('/submit', (req, res)=>{
+  const secret = req.body.secret;
+  console.log(req.user.id);
+  User.findOneAndUpdate({_id:req.user.id}, {$push:{secrets:secret}}, function(err, foundUser){
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/start');
+    }
+  });
 });
 
 app.listen(3000, () => {

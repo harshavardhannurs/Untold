@@ -1,10 +1,38 @@
 <%- include("partials/header") %>
 <nav class="navbar navbar-expand-lg bg-warning text-dark">
-  <a href="#" class="navbar-brand ms-3">Untold</a>
-    <ul class="navbar-nav ms-auto me-3">
-      <li class="nav-item"><a href="#" class="nav-link">Logout</a></li>
-    </ul>
+  <div class="d-flex w-100 flex-row justify-content-between">
+    <div style="margin-top:2px;">
+      <a href="mailto:harshanurs06@gmail.com?subject=feedback" class="navbar-brand brand-name ms-3">Untold</a>
+    </div>
+    <div class="me-3">
+      <a class="btn btn-warning add-secret rounded" href="/submit">Add your secret! <i class="fa-solid fa-plus"></i></a>
+    </div>
+    <div>
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
+<div class="start-header mt-4 mb-3">
+  Your secrets are safe here.
+</div>
+<% let secretsArray = [] %>
+<% for(let i=0;i<usersLists.length;i++){ %>
+<%   if(usersLists[i].secrets.length>0){ %>
+<%		 secretsArray.push(...usersLists[i].secrets) %>
+<%	 } %>
+<% } %>
+
+<div class="wrapper">
+<% for(let j=0;j<secretsArray.length;j++){ %>
+  <div class="box rounded">
+    <div class="box-body">
+    <%= secretsArray[j].slice(0, 120)%>
+    </div>
+  </div>
+<% } %>
+</div>
 
 
 <%- include("partials/footer") %>
