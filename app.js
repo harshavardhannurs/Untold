@@ -10,9 +10,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-let profileID = 0;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
