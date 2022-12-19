@@ -118,13 +118,6 @@ input[type="checkbox"] {
   -webkit-text-fill-color: transparent;
 }
 
-.google-logo{
-  display: inline-block;
-  width:24px;
-  height:23px;
-  background-color: white;
-}
-
 .signup-field div{
   margin-bottom:20px;
 }
@@ -230,6 +223,7 @@ textarea::placeholder{
   background-color: black;
   box-shadow:1px 1px 2px 0.5px #ffc107;
   color:#ffc107;
+  position:relative;
 }
 
 .empty-class{
@@ -267,6 +261,14 @@ textarea::placeholder{
   border: 1px solid red;
   border-radius: 50%;
   padding:0.9% 1.5%;
+}
+
+.react-btn{
+  position:absolute;
+  right:1px;
+  bottom:0;
+  color:gray;
+  border:none;
 }
 
 @media only screen and (min-width:768px){

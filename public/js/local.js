@@ -24,7 +24,3 @@ document.getElementById("character-check").addEventListener("input", (event)=>{
 function handleFocus(){
   document.getElementById("is-pass-valid").classList.add("disappear");
 }
-
-window.addEventListener("load", (event)=>{
-  document.getElementById("is-pass-valid").classList.remove("disappear");
-})

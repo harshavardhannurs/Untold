@@ -99,7 +99,6 @@ app.get("/start", (req, res)=>{
         console.log(err);
       }else{
         if(foundLists.length > 0){
-          console.log("FoundLists", foundLists);
           res.render('start', {usersLists:foundLists, status:null});
         }else{
           res.render('start', {usersLists:[], status:"*cricket chirp...*"})
@@ -198,6 +197,11 @@ app.post('/signin', (req, res)=>{
       })
     }
   });
+});
+
+app.post("/start", (req, res)=>{
+  console.log("selectedSecretID:", req.body.secretSelected);
+  res.redirect("/start");
 });
 
 app.post('/submit', (req, res)=>{

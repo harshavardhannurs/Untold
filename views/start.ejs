@@ -37,6 +37,10 @@
     <div class="box-body">
       <% let secretObject = JSON.parse(secretsArray[j]) %>
       <%= secretObject.secret.slice(0, 150)%>
+      <form action="/start" method="POST">
+        <input type="hidden" name="secretSelected" value=<%=secretObject.secretID %> >
+        <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-regular fa-heart"></i></button>
+      </form>
     </div>
   </div>
 <% } %>
