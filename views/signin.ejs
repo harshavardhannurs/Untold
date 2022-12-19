@@ -1,5 +1,6 @@
 <%- include('partials/header') %>
 
+<a href="/" class="text-warning ms-1 mb-3 brand-top">Untold</a>
 <div class="d-flex flex-column justify-content-center align-items-center signup-field">
   <div class="card">
     <div class="card-header">
@@ -8,13 +9,13 @@
     <div class="card-body">
       <form action="/signin" method="POST">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label>Email</label>
           <input type="email" id="emailSignin" class="form-control" placeholder="Enter email" name="username">
         </div>
         <div class="form-group password-field">
-          <label for="password">Password</label>
+          <label>Password</label>
           <input type="password" id="passwordSignin" class="form-control" placeholder="Enter password" name="password">
-          <input type="checkbox" id="showPass" onclick="handleClickIn()">
+          <input type="checkbox" id="showPassIn" onclick="handleClickIn()">
           <span style="font-size:0.9rem">Show password</span>
         </div>
         <button type="submit" class="btn btn-sm btn-warning rounded mb-2">Sign in</button>

@@ -85,7 +85,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/signup", (req, res) => {
-  res.render("signup");
+  res.render("signup", {message:null});
 });
 
 app.get("/signin", (req, res) => {
@@ -136,18 +136,52 @@ app.get("/logout", (req, res)=>{
   })
 });
 
+function isValid(password){
+  if(password.length < 8){
+    return false;
+  }
+  if(!numberExists(password)){
+    return false
+  }
+  return true;
+}
+
+function isNumber(c) {
+	let codeZero = "0".charCodeAt(0);
+	let codeNine = "9".charCodeAt(0);
+	if (c >= codeZero && c <= codeNine) {
+		return true;
+	}
+}
+
+function numberExists(str){
+	for(let i=0;i<str.length;i++){
+		if(!isNumber(str[i].charCodeAt(0))){
+			continue;
+		}else{
+			return true;
+		}
+	}
+	return false;
+}
+
 app.post("/signup", (req ,res)=>{
   //For this to work the input fields in our form must have names as "username" and "password" and our Schema must have the same too
-  User.register({username:req.body.username}, req.body.password, (err, user)=>{
-    if(err){
-      console.log(err);
-      res.redirect("/signup");
-    }else{
-      passport.authenticate("local")(req, res, function(){
-        res.redirect("/start");
-      })
-    }
-  })
+  const enteredPassword = req.body.password;
+  if(!isValid(enteredPassword)){
+    res.render("signup", {message:" Your password must have at least 8 characters with a number."});
+  }else{
+    User.register({username:req.body.username}, req.body.password, (err, user)=>{
+      if(err){
+        console.log(err);
+        res.redirect("/signup");
+      }else{
+        passport.authenticate("local")(req, res, function(){
+          res.redirect("/start");
+        })
+      }
+    })
+  }
 })
 
 app.post('/signin', (req, res)=>{

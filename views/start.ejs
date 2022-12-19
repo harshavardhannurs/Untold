@@ -20,7 +20,7 @@
 
 <%if(status){%>
   <div id="isEmpty" class="d-flex justify-content-center align-items-center mt-5 empty-class">
-    <%=status%>
+    <span><%=status%></span>
   </div>
 <%}%>
 
@@ -36,7 +36,7 @@
   <div class="box rounded">
     <div class="box-body">
       <% let secretObject = JSON.parse(secretsArray[j]) %>
-      <%= secretObject.secret.slice(0, 120)%>
+      <%= secretObject.secret.slice(0, 150)%>
     </div>
   </div>
 <% } %>
