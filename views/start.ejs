@@ -24,21 +24,13 @@
   </div>
 <%}%>
 
-<% let secretsArray = [] %>
-<% for(let i=0;i<usersLists.length;i++){ %>
-<%   if(usersLists[i].secrets.length>0){ %>
-<%		 secretsArray.push(...usersLists[i].secrets) %>
-<%	 } %>
-<% } %>
-
 <div class="wrapper">
-<% for(let j=0;j<secretsArray.length;j++){ %>
+<% for(let i=0;i<secrets.length;i++){ %>
   <div class="box rounded">
     <div class="box-body">
-      <% let secretObject = JSON.parse(secretsArray[j]) %>
-      <%= secretObject.secret.slice(0, 150)%>
-      <form action="/start" method="POST">
-        <input type="hidden" name="secretSelected" value=<%=secretObject.secretID %> >
+      <%= secrets[i].secret.slice(0, 150)%>
+      <form action="/react" method="POST">
+        <input type="hidden" name="secretID" value=<%=secrets[i].secretID %> >
         <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-regular fa-heart"></i></button>
       </form>
     </div>

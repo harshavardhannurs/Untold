@@ -36,13 +36,20 @@ const userSchema = new mongoose.Schema({
   username:String,
   email:String,
   password: String,
-  secrets: [String]
 });
+
+const secretSchema = new mongoose.Schema({
+  secretID:String,
+  secret:String,
+  likes:Number,
+  likedBy:[String]
+})
 
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 const User = mongoose.model("User", userSchema);
+const Secret = mongoose.model("Secret", secretSchema);
 
 passport.use(User.createStrategy());
 
@@ -94,14 +101,15 @@ app.get("/signin", (req, res) => {
 
 app.get("/start", (req, res)=>{
   if(req.isAuthenticated()){
-    User.find({$expr:{$gt:[{$size:"$secrets"}, 0]}}, (err, foundLists)=>{
+    Secret.find({secret:{$ne:null}}, (err, foundLists)=>{
       if(err){
         console.log(err);
       }else{
+        console.log(foundLists);
         if(foundLists.length > 0){
-          res.render('start', {usersLists:foundLists, status:null});
+          res.render('start', {secrets:foundLists, status:null});
         }else{
-          res.render('start', {usersLists:[], status:"*cricket chirp...*"})
+          res.render('start', {secrets:[], status:"*cricket chirp...*"})
         }
       }
     })
@@ -199,25 +207,28 @@ app.post('/signin', (req, res)=>{
   });
 });
 
-app.post("/start", (req, res)=>{
-  console.log("selectedSecretID:", req.body.secretSelected);
-  res.redirect("/start");
-});
-
 app.post('/submit', (req, res)=>{
   const secret = req.body.secret;
   const secretID = new Date().getTime().toString() + Math.round(Math.random()*1000000).toString().slice(0, 16);
-  const secretItem = {
+  const secretItem = new Secret({
+    secretID:secretID,
     secret:secret,
-    secretID:secretID
-  }
-  const userSecret = JSON.stringify(secretItem);
-  User.findOneAndUpdate({_id:req.user.id}, {$push:{secrets:userSecret}}, function(err, foundUser){
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect('/start');
+    likes:0,
+    likedBy:[]
+  })
+  secretItem.save((err)=>{
+    if(err){
+      res.redirect("/submit");
     }
+    res.redirect("/start");
+  });
+});
+
+app.post("/react", (req, res)=>{
+  const secretID = req.body.secretID;
+  const likedUser = req.user.id;
+  Secret.updateMany({secretID:secretID}, {$inc:{likes:1}, $push:{likedBy:likedUser}}, (err, found)=>{
+    res.redirect("/start");
   });
 });
 
