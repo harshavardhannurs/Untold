@@ -330,4 +330,7 @@ textarea::placeholder{
     justify-content:end;
     margin-right:5px;
   }
+  .box{
+    min-height:100px;
+  }
 }
