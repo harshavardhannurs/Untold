@@ -224,10 +224,39 @@ app.post('/submit', (req, res)=>{
   });
 });
 
-app.post("/react", (req, res)=>{
+app.post("/like", (req, res)=>{
   const secretID = req.body.secretID;
   const likedUser = req.user.id;
-  Secret.updateMany({secretID:secretID}, {$inc:{likes:1}, $push:{likedBy:likedUser}}, (err, found)=>{
+
+  Secret.findOne({secretID:secretID}, (err, secret)=>{
+    const likedUsers = secret.likedBy;
+    console.log(likedUsers);
+    console.log(typeof(likedUsers));
+    const found = likedUsers.find((item)=>{
+      if(item === likedUser){
+        return item;
+      }
+    });
+    if(found){
+      Secret.updateOne({secretID:secretID}, {$inc:{likes:-1}, $pull:{likedBy:likedUser}}, (err, found)=>{
+        res.redirect("/start");
+      });
+    }else{
+      Secret.updateOne({secretID:secretID}, {$inc:{likes:1}, $push:{likedBy:likedUser}}, (err, found)=>{
+        res.redirect("/start");
+      });
+    }
+  });
+
+
+});
+
+// {$inc:{likes:1}, $push:{likedBy:likedUser}}
+
+app.post("/unlike", (req, res)=>{
+  const secretID = req.body.secretID;
+  const likedUser = req.user.id;
+  Secret.updateOne({secretID:secretID}, {$inc:{likes:-1}, $pull:{likedBy:likedUser}}, (err, found)=>{
     res.redirect("/start");
   });
 });

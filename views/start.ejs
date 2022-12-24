@@ -29,9 +29,9 @@
   <div class="box rounded">
     <div class="box-body">
       <%= secrets[i].secret.slice(0, 150)%>
-      <form action="/react" method="POST">
+      <form action="/like" method="POST">
         <input type="hidden" name="secretID" value=<%=secrets[i].secretID %> >
-        <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-regular fa-heart"></i></button>
+        <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-regular fa-heart"></i><span class="like-count"> <%=secrets[i].likes%></span></button>
       </form>
     </div>
   </div>

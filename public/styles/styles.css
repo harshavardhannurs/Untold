@@ -275,6 +275,10 @@ textarea::placeholder{
   color:red;
 }
 
+.like-count{
+  color:#ffc107;
+}
+
 @media only screen and (min-width:768px){
   .main-title{
     font-size: 10rem;
