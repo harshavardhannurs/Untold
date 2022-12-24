@@ -24,14 +24,21 @@
   </div>
 <%}%>
 
+
+
 <div class="wrapper">
 <% for(let i=0;i<secrets.length;i++){ %>
   <div class="box rounded">
     <div class="box-body">
       <%= secrets[i].secret.slice(0, 150)%>
-      <form action="/like" method="POST">
+      <% const found = secrets[i].likedBy.find((item)=>{if(currentUser===item){return item}}) %>
+      <form action="/reaction" method="POST">
         <input type="hidden" name="secretID" value=<%=secrets[i].secretID %> >
-        <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-regular fa-heart"></i><span class="like-count"> <%=secrets[i].likes%></span></button>
+        <% if(!found){ %>
+          <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-regular fa-heart"></i><span class="not-liked"> <%=secrets[i].likes%></span></button>
+        <%}else{%>
+          <button id="btn-react" class="btn react-btn" type="submit"><i class="fa-solid fa-heart liked-btn"></i><span class="liked"> <%=secrets[i].likes%></span></button>
+        <%}%>
       </form>
     </div>
   </div>

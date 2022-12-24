@@ -271,12 +271,12 @@ textarea::placeholder{
   border:none;
 }
 
-.liked-btn{
-  color:red;
+.not-liked, .liked{
+  color:#ffc107;
 }
 
-.like-count{
-  color:#ffc107;
+.liked-btn{
+  color:red;
 }
 
 @media only screen and (min-width:768px){

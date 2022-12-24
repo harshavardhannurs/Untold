@@ -107,9 +107,9 @@ app.get("/start", (req, res)=>{
       }else{
         console.log(foundLists);
         if(foundLists.length > 0){
-          res.render('start', {secrets:foundLists, status:null});
+          res.render('start', {secrets:foundLists, status:null, currentUser:req.user.id});
         }else{
-          res.render('start', {secrets:[], status:"*cricket chirp...*"})
+          res.render('start', {secrets:[], status:"*cricket chirp...*", currentUser:req.user.id})
         }
       }
     })
@@ -224,14 +224,12 @@ app.post('/submit', (req, res)=>{
   });
 });
 
-app.post("/like", (req, res)=>{
+app.post("/reaction", (req, res)=>{
   const secretID = req.body.secretID;
   const likedUser = req.user.id;
 
   Secret.findOne({secretID:secretID}, (err, secret)=>{
     const likedUsers = secret.likedBy;
-    console.log(likedUsers);
-    console.log(typeof(likedUsers));
     const found = likedUsers.find((item)=>{
       if(item === likedUser){
         return item;
@@ -247,8 +245,6 @@ app.post("/like", (req, res)=>{
       });
     }
   });
-
-
 });
 
 // {$inc:{likes:1}, $push:{likedBy:likedUser}}
